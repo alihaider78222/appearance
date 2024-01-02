@@ -23,8 +23,9 @@ class _MyAppState extends State<MyApp> with AppearanceState {
   @override
   Widget build(BuildContext context) {
     return BuildWithAppearance(
+      initial: ThemeMode.dark,
       builder: (context) => MaterialApp(
-        title: 'Flutter Demo',
+        title: 'Appearance Demo',
         themeMode: Appearance.of(context)?.mode,
         theme: ThemeData(
           useMaterial3: true,
@@ -34,8 +35,8 @@ class _MyAppState extends State<MyApp> with AppearanceState {
           useMaterial3: true,
           brightness: Brightness.dark,
         ),
-        home: MyHomePage(
-          title: 'Flutter Demo Home Page, ${Appearance.of(context)?.mode}',
+        home: const MyHomePage(
+          title: 'Appearance Demo',
         ),
       ),
     );
@@ -65,20 +66,58 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            ElevatedButton(
-              onPressed: () {
-                if (appearance?.mode == ThemeMode.dark) {
-                  appearance?.setMode(ThemeMode.light);
-                } else if (appearance?.mode == ThemeMode.light) {
-                  appearance?.setMode(ThemeMode.dark);
-                } else {
-                  appearance?.setMode(ThemeMode.light);
-                }
-              },
-              child: const Text('Theme change'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                themeCard(
+                  mode: ThemeMode.system,
+                  icon: Icons.contrast_rounded,
+                  onTap: () => appearance?.setMode(ThemeMode.system),
+                ),
+                const SizedBox(width: 22),
+                themeCard(
+                  mode: ThemeMode.light,
+                  icon: Icons.wb_sunny_outlined,
+                  onTap: () => appearance?.setMode(ThemeMode.light),
+                ),
+                const SizedBox(width: 22),
+                themeCard(
+                  mode: ThemeMode.dark,
+                  icon: Icons.nights_stay_outlined,
+                  onTap: () => appearance?.setMode(ThemeMode.dark),
+                ),
+              ],
             ),
-            Text('Theme is ${appearance?.mode}'),
+            const SizedBox(height: 18),
+            Text('Active theme is ${appearance?.mode.name}'),
           ],
+        ),
+      ),
+    );
+  }
+
+  themeCard({required ThemeMode mode, required IconData icon, required onTap}) {
+    var activeThemeMode = Appearance.of(context)?.mode;
+    return Card(
+      elevation: 2,
+      shadowColor: Theme.of(context).colorScheme.shadow,
+      color: activeThemeMode == mode
+          ? Theme.of(context).colorScheme.primary
+          : Theme.of(context).backgroundColor,
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(12))),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: const BorderRadius.all(Radius.circular(12)),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 22),
+          child: Icon(
+            icon,
+            size: 32,
+            color: activeThemeMode != mode
+                ? Theme.of(context).colorScheme.primary
+                : Colors.white,
+          ),
         ),
       ),
     );

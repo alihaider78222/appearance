@@ -26,10 +26,6 @@ class Appearance extends InheritedWidget {
 }
 
 mixin AppearanceState<T extends StatefulWidget> on State<T> {
-  // final SharedPreferenceHelper _prefs = getIt<SharedPreferenceHelper>();
-  // final GetThemeModeUseCase _getThemeModeUseCase = getIt<GetThemeModeUseCase>();
-  // final SetThemeModeUseCase _setThemeModeUseCase = getIt<SetThemeModeUseCase>();
-
   final SharedPreferences _sharedPreferences =
       SharedPreferencesManager.instance.preference;
 
@@ -38,11 +34,7 @@ mixin AppearanceState<T extends StatefulWidget> on State<T> {
   void _load() {
     // getting themeMode
     String themeMode = PreferenceManager(_sharedPreferences).themeMode;
-    _mode = themeModeFromString(themeMode) ?? ThemeMode.system;
-
-    // TODO
-    // _mode = themeModeFromString(_getThemeModeUseCase.call(params: null)) ??
-    //     ThemeConstants.kDefaultThemeMode; // getting themeMode
+    _mode = themeModeFromString(themeMode);
   }
 
   void setMode(ThemeMode mode) {
@@ -50,12 +42,8 @@ mixin AppearanceState<T extends StatefulWidget> on State<T> {
       _mode = mode;
     });
 
-    // setting themeMode
+    // set themeMode in SharedPreferences
     PreferenceManager(_sharedPreferences).themeMode = themeModeToString(mode);
-
-    // TODO
-    // _setThemeModeUseCase.call(
-    //     params: themeModeToString(mode)!); // setting themeMode
   }
 
   @override
@@ -67,9 +55,12 @@ mixin AppearanceState<T extends StatefulWidget> on State<T> {
   }
 
   // ignore: non_constant_identifier_names
-  Widget BuildWithAppearance({required WidgetBuilder builder}) {
+  Widget BuildWithAppearance({
+    ThemeMode? initial,
+    required WidgetBuilder builder,
+  }) {
     return Appearance(
-      mode: _mode ?? ThemeMode.system,
+      mode: _mode ?? initial ?? ThemeMode.system,
       setMode: setMode,
       child: Builder(builder: builder),
     );
