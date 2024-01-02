@@ -16,8 +16,12 @@ class SharedPreferencesManager {
   }
 
   // Initialize SharedPreferences
-  Future<void> init() async {
-    _preferences = await SharedPreferences.getInstance();
+  Future<void> init({SharedPreferences? preferences}) async {
+    if (preferences != null) {
+      _preferences = preferences;
+    } else {
+      _preferences = await SharedPreferences.getInstance();
+    }
   }
 
   SharedPreferences get preference => _preferences;

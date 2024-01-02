@@ -9,11 +9,13 @@ import 'themes.dart';
 class Appearance extends InheritedWidget {
   final ThemeMode mode;
   final ValueChanged<ThemeMode> setMode;
+  final Brightness? cupertinoBrightness;
 
-  const Appearance({
+  Appearance({
     required this.mode,
     required this.setMode,
     required Widget child,
+    this.cupertinoBrightness,
     Key? key,
     // })  : assert(mode != null),
   }) : super(child: child, key: key);
@@ -46,6 +48,19 @@ mixin AppearanceState<T extends StatefulWidget> on State<T> {
     PreferenceManager(_sharedPreferences).themeMode = themeModeToString(mode);
   }
 
+  Brightness? get cupertinoBrightness {
+    switch (_mode) {
+      case ThemeMode.system:
+        return Brightness.light; //Brightness.light;
+      case ThemeMode.light:
+        return Brightness.light;
+      case ThemeMode.dark:
+        return Brightness.dark;
+      default:
+        return null;
+    }
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -62,6 +77,7 @@ mixin AppearanceState<T extends StatefulWidget> on State<T> {
     return Appearance(
       mode: _mode ?? initial ?? ThemeMode.system,
       setMode: setMode,
+      cupertinoBrightness: cupertinoBrightness,
       child: Builder(builder: builder),
     );
   }

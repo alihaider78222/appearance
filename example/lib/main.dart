@@ -1,5 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:appearance/appearance.dart';
+
+import 'cupertino_example.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -7,6 +10,13 @@ Future<void> main() async {
   // Initiate shared preference instance
   //
   await SharedPreferencesManager.instance.init();
+
+  // OR
+  // If you are using getIt and SharedPreferences instance is already initiated
+  // then we can pass that SharedPreferences instance from getIt to SharedPreferencesManager
+  // e.g
+  //
+  // await SharedPreferencesManager.instance.init( getIt<SharedPreferences>);
 
   runApp(const MyApp());
 }
@@ -19,13 +29,16 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> with AppearanceState {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    //
+    // Wrap your root Material/Cupertino widget with [BuildWithAppearance].
+    //
     return BuildWithAppearance(
-      initial: ThemeMode.dark,
+      // initial => optional parameter, default value is [ThemeMode.system]
+      // initial: ThemeMode.dark,
       builder: (context) => MaterialApp(
-        title: 'Appearance Demo',
+        title: 'Appearance (Material Example)',
         themeMode: Appearance.of(context)?.mode,
         theme: ThemeData(
           useMaterial3: true,
@@ -35,24 +48,24 @@ class _MyAppState extends State<MyApp> with AppearanceState {
           useMaterial3: true,
           brightness: Brightness.dark,
         ),
-        home: const MyHomePage(
-          title: 'Appearance Demo',
+        home: const MaterialHomePage(
+          title: 'Appearance (Material Example)',
         ),
       ),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class MaterialHomePage extends StatefulWidget {
+  const MaterialHomePage({super.key, required this.title});
 
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MaterialHomePage> createState() => _MaterialHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MaterialHomePageState extends State<MaterialHomePage> {
   @override
   Widget build(BuildContext context) {
     final appearance = Appearance.of(context);
@@ -65,23 +78,28 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
+            const Spacer(flex: 2),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 themeCard(
+                  context,
                   mode: ThemeMode.system,
                   icon: Icons.contrast_rounded,
                   onTap: () => appearance?.setMode(ThemeMode.system),
                 ),
                 const SizedBox(width: 22),
                 themeCard(
+                  context,
                   mode: ThemeMode.light,
                   icon: Icons.wb_sunny_outlined,
                   onTap: () => appearance?.setMode(ThemeMode.light),
                 ),
                 const SizedBox(width: 22),
                 themeCard(
+                  context,
                   mode: ThemeMode.dark,
                   icon: Icons.nights_stay_outlined,
                   onTap: () => appearance?.setMode(ThemeMode.dark),
@@ -90,13 +108,23 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             const SizedBox(height: 18),
             Text('Active theme is ${appearance?.mode.name}'),
+            const Spacer(flex: 2),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: TextButton(
+                onPressed: _navigateToCupertinoExample,
+                child: const Text('Show Cupertino Example'),
+              ),
+            ),
+            const SizedBox(height: 22),
           ],
         ),
       ),
     );
   }
 
-  themeCard({required ThemeMode mode, required IconData icon, required onTap}) {
+  themeCard(BuildContext context,
+      {required ThemeMode mode, required IconData icon, required onTap}) {
     var activeThemeMode = Appearance.of(context)?.mode;
     return Card(
       elevation: 2,
@@ -120,6 +148,13 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       ),
+    );
+  }
+
+  _navigateToCupertinoExample() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const CupertinoHomePage()),
     );
   }
 }
