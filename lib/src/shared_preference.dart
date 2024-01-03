@@ -9,9 +9,7 @@ class SharedPreferencesManager {
 
   // Getter for the singleton instance
   static SharedPreferencesManager get instance {
-    if (_instance == null) {
-      _instance = SharedPreferencesManager._();
-    }
+    _instance ??= SharedPreferencesManager._();
     return _instance!;
   }
 

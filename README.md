@@ -8,13 +8,12 @@ A Flutter package that easily implement Light, Dark and System theme mode in you
 
 ## 📱 Screenshots
 
-<div style="text-align: center">
-  <video src="https://raw.githubusercontent.com/alihaider78222/appearance/main/screenshots/demo_1.mp4" alt="Appearance Demo 1" width="auto" height="570">
-  </video>
-  <video src="https://raw.githubusercontent.com/alihaider78222/appearance/main/screenshots/demo_2.mp4" alt="Appearance Demo 2" width="auto" height="570">
-  </video>
+<p style="float: left;">
+  <img src="https://raw.githubusercontent.com/alihaider78222/appearance/main/screenshots/demo_1.gif" alt="Appearance Demo 1" width="auto" height="570"  style="margin-right:20px" />
 
-</div>
+  <img src="https://raw.githubusercontent.com/alihaider78222/appearance/main/screenshots/demo_2.gif" alt="Appearance Demo 2" width="auto" height="570" />
+
+</p>
 
 ## 🛠 Installation
 
@@ -32,7 +31,9 @@ dependencies:
 import 'package:appearance/appearance.dart';
 ```
 
-3. Initialize `SharedPreference` instance using `SharedPreferencesManager` class before `runApp()` method.
+## 📘 How to use
+
+1. Initialize `SharedPreference` instance using `SharedPreferencesManager` class before `runApp()` method.
 
 
 ```dart
@@ -43,13 +44,13 @@ void main() async {
 }
 ```
 
-4. extend your root class with `AppearanceState` using keyword `with`.
+2. extend your root class with `AppearanceState` using keyword `with`.
 
 ```dart
 class _MyAppState extends State<MyApp> with AppearanceState { }
 ```
 
-5. Wrap your `MaterialApp` or `CupertinoApp` with  **BuildWithAppearance**
+3. Wrap your `MaterialApp` or `CupertinoApp` with  **BuildWithAppearance**
 
 ```dart
 BuildWithAppearance(
@@ -103,7 +104,7 @@ BuildWithAppearance(
 
 - **Light, Dark and System** mode options to change theme of app.
 
-- **Theme persistance**: Saved theme is persisted using `SharedPreferences` on restart.
+- **Theme persistance**: Saved theme is persisted using [`SharedPreferences`](https://pub.dev/packages/shared_preferences) on restart.
 
 - **Auto Listen Theme Mode changes**, without adding extra listener.
 
@@ -135,162 +136,21 @@ You can use the `setMode` method to change the theme mode of the app.
  Appearance.of(context)?.mode
 ```
 
-
 ## 💻 Example
 
-Check out the **example** app in the [example](example) directory for both `Material` an `Cupertino`.
+Check out the **example** app in the [example](/example/lib) directory for both `Material` and `Cupertino`.
 
-```dart
+- [MaterialApp Example](/example/lib/main.dart)
 
-void main() async {
-
-  WidgetsFlutterBinding.ensureInitialized();
-
-  //
-  // Initiate shared preference instance with [SharedPreferencesManager].
-  //
-  await SharedPreferencesManager.instance.init();
-
-  // OR : ---------------------------------------------------------------------
-  //
-  // If you are using getIt and SharedPreferences instance is already initiated
-  // then we can pass that SharedPreferences instance from getIt to SharedPreferencesManager
-  // to avoid creating multiple instance, e.g
-  //
-  // await SharedPreferencesManager.instance.init( getIt<SharedPreferences> );
-
-  runApp(const MyApp());
-}
-
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> with AppearanceState {
-  @override
-  Widget build(BuildContext context) {
-    //
-    // Wrap your root Material/Cupertino widget with [BuildWithAppearance].
-    //
-    return BuildWithAppearance(
-      // initial: ThemeMode.light, optional parameter, default value is [ThemeMode.system]
-      builder: (context) => MaterialApp(
-        title: 'Appearance Demo',
-        themeMode: Appearance.of(context)?.mode,
-        theme: ThemeData(
-          brightness: Brightness.light,
-        ),
-        darkTheme: ThemeData(
-          brightness: Brightness.dark,
-        ),
-        home: const MaterialHomePage(
-          title: 'Appearance (Material Example)',
-        ),
-      ),
-    );
-  }
-}
-
-class MaterialHomePage extends StatefulWidget {
-  const MaterialHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MaterialHomePage> createState() => _MaterialHomePageState();
-}
-
-class _MaterialHomePageState extends State<MaterialHomePage> {
-  @override
-  Widget build(BuildContext context) {
-    final appearance = Appearance.of(context);
-
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            const Spacer(flex: 2),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                themeCard(
-                  context,
-                  mode: ThemeMode.system,
-                  icon: Icons.contrast_rounded,
-                  onTap: () => appearance?.setMode(ThemeMode.system),
-                ),
-                const SizedBox(width: 22),
-                themeCard(
-                  context,
-                  mode: ThemeMode.light,
-                  icon: Icons.wb_sunny_outlined,
-                  onTap: () => appearance?.setMode(ThemeMode.light),
-                ),
-                const SizedBox(width: 22),
-                themeCard(
-                  context,
-                  mode: ThemeMode.dark,
-                  icon: Icons.nights_stay_outlined,
-                  onTap: () => appearance?.setMode(ThemeMode.dark),
-                ),
-              ],
-            ),
-            const SizedBox(height: 18),
-            Text('Active theme is ${appearance?.mode.name}'),
-            const Spacer(flex: 2),
-          ],
-        ),
-      ),
-    );
-  }
-
-  themeCard(BuildContext context,
-      {required ThemeMode mode, required IconData icon, required onTap}) {
-    var activeThemeMode = Appearance.of(context)?.mode;
-    return Card(
-      elevation: 2,
-      shadowColor: Theme.of(context).colorScheme.shadow,
-      color: activeThemeMode == mode
-          ? Theme.of(context).colorScheme.primary
-          : Theme.of(context).backgroundColor,
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(12))),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: const BorderRadius.all(Radius.circular(12)),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 22),
-          child: Icon(
-            icon,
-            size: 32,
-            color: activeThemeMode != mode
-                ? Theme.of(context).colorScheme.primary
-                : Colors.white,
-          ),
-        ),
-      ),
-    );
-  }
-```
+- [CupertinoApp Example](/example/lib/cupertino_example.dart)
 
 ## 📝Contribution
 
-Of course the project is open source, and you are welcome to contribute. [repository link](https://github.com/alihaider78222/appearance)
+Feel free to contribute to this [project.](https://github.com/alihaider78222/appearance)
 
-- If you **found a bug**, open an issue.
+- If you **found a bug** or **have a feature request**, open an issue.
 
-- If you **have a feature request**, open an issue.
-
-- If you **want to contribute**, submit a pull request.
+- If you **want to contribute**, submit a [pull request.](https://github.com/alihaider78222/appearance/pulls)
 
 ## 💳 License
 
