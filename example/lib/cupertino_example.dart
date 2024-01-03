@@ -74,7 +74,7 @@ class _CupertinoHomePageState extends State<CupertinoHomePage>
               alignment: Alignment.bottomCenter,
               child: CupertinoButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text('Show Cupertino Example'),
+                child: const Text('Show Material Example'),
               ),
             ),
             const SizedBox(height: 22),

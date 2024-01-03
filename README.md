@@ -2,17 +2,19 @@
 
 # Appearance
 
-A Flutter package that easily implement Light and Dark theme in your application and persists the theme mode on restart of the application.
-
+A Flutter package that easily implement Light, Dark and System theme mode in your application and persists the theme mode on restart of the application.
 
 🚀 Demo: [Appearance](https://alihaider78222.github.io/appearance/)
 
 ## 📱 Screenshots
 
-<p float="left">
-  <img src="https://raw.githubusercontent.com/alihaider78222/appearance/main/screenshots/demo_1.gif" alt="Appearance Demo 1" width="auto" height="570">
-  <img src="https://raw.githubusercontent.com/alihaider78222/appearance/main/screenshots/demo_2.gif" alt="Appearance Demo 2" width="auto" height="570">
-</p>
+<div style="text-align: center">
+  <video src="https://raw.githubusercontent.com/alihaider78222/appearance/main/screenshots/demo_1.mp4" alt="Appearance Demo 1" width="auto" height="570">
+  </video>
+  <video src="https://raw.githubusercontent.com/alihaider78222/appearance/main/screenshots/demo_2.mp4" alt="Appearance Demo 2" width="auto" height="570">
+  </video>
+
+</div>
 
 ## 🛠 Installation
 
@@ -140,7 +142,144 @@ Check out the **example** app in the [example](example) directory for both `Mate
 
 ```dart
 
+void main() async {
 
+  WidgetsFlutterBinding.ensureInitialized();
+
+  //
+  // Initiate shared preference instance with [SharedPreferencesManager].
+  //
+  await SharedPreferencesManager.instance.init();
+
+  // OR : ---------------------------------------------------------------------
+  //
+  // If you are using getIt and SharedPreferences instance is already initiated
+  // then we can pass that SharedPreferences instance from getIt to SharedPreferencesManager
+  // to avoid creating multiple instance, e.g
+  //
+  // await SharedPreferencesManager.instance.init( getIt<SharedPreferences> );
+
+  runApp(const MyApp());
+}
+
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> with AppearanceState {
+  @override
+  Widget build(BuildContext context) {
+    //
+    // Wrap your root Material/Cupertino widget with [BuildWithAppearance].
+    //
+    return BuildWithAppearance(
+      // initial: ThemeMode.light, optional parameter, default value is [ThemeMode.system]
+      builder: (context) => MaterialApp(
+        title: 'Appearance Demo',
+        themeMode: Appearance.of(context)?.mode,
+        theme: ThemeData(
+          brightness: Brightness.light,
+        ),
+        darkTheme: ThemeData(
+          brightness: Brightness.dark,
+        ),
+        home: const MaterialHomePage(
+          title: 'Appearance (Material Example)',
+        ),
+      ),
+    );
+  }
+}
+
+class MaterialHomePage extends StatefulWidget {
+  const MaterialHomePage({super.key, required this.title});
+
+  final String title;
+
+  @override
+  State<MaterialHomePage> createState() => _MaterialHomePageState();
+}
+
+class _MaterialHomePageState extends State<MaterialHomePage> {
+  @override
+  Widget build(BuildContext context) {
+    final appearance = Appearance.of(context);
+
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: Text(widget.title),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            const Spacer(flex: 2),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                themeCard(
+                  context,
+                  mode: ThemeMode.system,
+                  icon: Icons.contrast_rounded,
+                  onTap: () => appearance?.setMode(ThemeMode.system),
+                ),
+                const SizedBox(width: 22),
+                themeCard(
+                  context,
+                  mode: ThemeMode.light,
+                  icon: Icons.wb_sunny_outlined,
+                  onTap: () => appearance?.setMode(ThemeMode.light),
+                ),
+                const SizedBox(width: 22),
+                themeCard(
+                  context,
+                  mode: ThemeMode.dark,
+                  icon: Icons.nights_stay_outlined,
+                  onTap: () => appearance?.setMode(ThemeMode.dark),
+                ),
+              ],
+            ),
+            const SizedBox(height: 18),
+            Text('Active theme is ${appearance?.mode.name}'),
+            const Spacer(flex: 2),
+          ],
+        ),
+      ),
+    );
+  }
+
+  themeCard(BuildContext context,
+      {required ThemeMode mode, required IconData icon, required onTap}) {
+    var activeThemeMode = Appearance.of(context)?.mode;
+    return Card(
+      elevation: 2,
+      shadowColor: Theme.of(context).colorScheme.shadow,
+      color: activeThemeMode == mode
+          ? Theme.of(context).colorScheme.primary
+          : Theme.of(context).backgroundColor,
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(12))),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: const BorderRadius.all(Radius.circular(12)),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 22),
+          child: Icon(
+            icon,
+            size: 32,
+            color: activeThemeMode != mode
+                ? Theme.of(context).colorScheme.primary
+                : Colors.white,
+          ),
+        ),
+      ),
+    );
+  }
 ```
 
 ## 📝Contribution

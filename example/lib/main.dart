@@ -6,14 +6,15 @@ import 'cupertino_example.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   //
-  // Initiate shared preference instance
+  // Initiate shared preference instance with [SharedPreferencesManager].
   //
   await SharedPreferencesManager.instance.init();
 
   // OR
+  //
   // If you are using getIt and SharedPreferences instance is already initiated
   // then we can pass that SharedPreferences instance from getIt to SharedPreferencesManager
-  // e.g
+  // to avoid creating multiple instance, e.g
   //
   // await SharedPreferencesManager.instance.init( getIt<SharedPreferences> );
 
