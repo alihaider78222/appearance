@@ -1,10 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:appearance/appearance.dart';
 
 import 'cupertino_example.dart';
 
-Future<void> main() async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   //
   // Initiate shared preference instance
@@ -16,7 +15,7 @@ Future<void> main() async {
   // then we can pass that SharedPreferences instance from getIt to SharedPreferencesManager
   // e.g
   //
-  // await SharedPreferencesManager.instance.init( getIt<SharedPreferences>);
+  // await SharedPreferencesManager.instance.init( getIt<SharedPreferences> );
 
   runApp(const MyApp());
 }
@@ -38,7 +37,7 @@ class _MyAppState extends State<MyApp> with AppearanceState {
       // initial => optional parameter, default value is [ThemeMode.system]
       // initial: ThemeMode.dark,
       builder: (context) => MaterialApp(
-        title: 'Appearance (Material Example)',
+        title: 'Appearance Demo',
         themeMode: Appearance.of(context)?.mode,
         theme: ThemeData(
           useMaterial3: true,

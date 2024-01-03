@@ -20,7 +20,7 @@ class _CupertinoHomePageState extends State<CupertinoHomePage>
       initial: ThemeMode.dark,
       builder: (context) {
         return CupertinoApp(
-          title: 'Appearance (Cupertino Example)',
+          title: 'Appearance Demo',
           theme: CupertinoThemeData(
             brightness: Appearance.of(context)?.cupertinoBrightness!,
           ),
