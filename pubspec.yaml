@@ -1,7 +1,7 @@
 # package developed by @alihaider78222
 
 name: appearance
-description: "A Flutter package to change and persist, Light and Dark mode."
+description: "Flutter package to implement Light, Dark and Sytem Theme mode, and persist it on restart of app."
 version: 0.0.1
 homepage: https://github.com/alihaider78222/appearance
 issue_tracker: https://github.com/alihaider78222/appearance/issues
@@ -17,6 +17,12 @@ screenshots:
     path: screenshots/appearance.png
   - description: 'Cupertino App Light and Dark mode.'
     path: screenshots/appearance_2.png
+
+topics:
+  - appearance
+  - theme
+  - light-mode
+  - dark-mode
 
 
 environment:

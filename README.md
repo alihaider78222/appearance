@@ -2,7 +2,7 @@
 
 # Appearance
 
-A Flutter package that easily implement Light, Dark and System theme mode in your application and persists the theme mode on restart of the application.
+Flutter package that easily implement Light, Dark and System theme mode in your application and persists the theme mode on restart of the application.
 
 🚀 Demo: [Appearance](https://alihaider78222.github.io/appearance/)
 
