@@ -33,8 +33,7 @@ import 'package:appearance/appearance.dart';
 
 ## 📘 How to use
 
-1. Initialize `SharedPreference` instance using `SharedPreferencesManager` class before `runApp()` method.
-
+1. Initialize `SharedPreferencesManager` singleton for `SharedPreference` and add it before `runApp()` method.
 
 ```dart
 void main() async {
@@ -112,13 +111,13 @@ BuildWithAppearance(
 
 ## 🧰 Parameters
 
-- <b>initial</b>: *[optional]* </br>Set the initial `ThemeMode` of the app, by default its value is `ThemeMode.system`
+- **initial**</b>: *[optional]* </br>Set the initial `ThemeMode` of the app, by default its value is `ThemeMode.system`
 
 ## Change Theme Mode
 
 You can use the `setMode` method to change the theme mode of the app.
 
-```
+```dart
  // sets theme mode to System
  Appearance.of(context)?.setMode(ThemeMode.system),
 
@@ -131,9 +130,16 @@ You can use the `setMode` method to change the theme mode of the app.
 
 ## Get Theme Mode
 
-```
+```dart
  // get active theme mode
  Appearance.of(context)?.mode
+```
+
+## Get Cupertino Theme brightness
+
+```dart
+ // get active cupertino theme brightness
+ Appearance.of(context)?.cupertinoBrightness!,
 ```
 
 ## 💻 Example

@@ -7,8 +7,19 @@ import 'themes.dart';
 
 /// Appearance
 class Appearance extends InheritedWidget {
+  /// Getter to get saved [ThemeMode].
+  ///
+  /// If [mode] is optional, default value is [ThemeMode.system].
   final ThemeMode mode;
+
+  /// Setter to save [ThemeMode].
+  ///
+  /// Saved ThemeMode is persisted on restart of app.
   final ValueChanged<ThemeMode> setMode;
+
+  /// Getter to get current [Brightness] for [CupertinoApp]
+  ///
+  /// it is used in [CupertinoThemeData] [brightness] to set automatically light/dark brightness on theme change.
   final Brightness? cupertinoBrightness;
 
   Appearance({
